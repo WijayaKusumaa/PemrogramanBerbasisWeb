@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tracking Pengiriman - SITTA UT</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <img src="assets/img/logo-ut.jpg" alt="Logo UT" style="height:40px;margin-right:10px;" onerror="this.src='assets/img/Default.jpg'">
+      <h1 class="brand">SITTA - UT</h1>
+      <nav>
+        <a href="dashboard.html" class="btn ghost">🏠 Dashboard</a>
+        <a href="stok.html" class="btn ghost">📚 Stok</a>
+        <button id="logoutBtn" class="btn secondary">Logout</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    
+    <section class="card">
+      <h2 id="greeting"></h2>
+      <p id="userInfo"></p>
+
+      <form id="trackingForm" class="form">
+        <label for="doNumber">Nomor Delivery Order (DO)</label>
+        <input id="doNumber" type="text" placeholder="Contoh: DO001" required>
+        <button type="submit" class="btn primary">Cari</button>
+      </form>
+    </section>
+
+    <section id="trackingResult" class="card hide">
+      <h3>Hasil Pencarian</h3>
+      <p><strong>Nama Mahasiswa:</strong> <span id="nama"></span></p>
+      <p><strong>Status:</strong> <span id="status"></span></p>
+      <p><strong>Progress:</strong> <span id="progress"></span>%</p>
+      <p><strong>Ekspedisi:</strong> <span id="ekspedisi"></span></p>
+      <p><strong>Tanggal Kirim:</strong> <span id="tglKirim"></span></p>
+      <p><strong>Jenis Paket:</strong> <span id="jenis"></span></p>
+      <p><strong>Total Bayar:</strong> Rp <span id="totalBayar"></span></p>
+    </section>
+
+    <section id="trackingSummary" class="card summary">
+      <h3>Ringkasan Status Pengiriman</h3>
+      <p id="totalDO">Total DO: 0</p>
+      <p id="dalamPengiriman">Dalam Pengiriman: 0</p>
+      <p id="terkirim">Terkirim: 0</p>
+      <p id="disiapkan">Disiapkan: 0</p>
+    </section>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>No. DO</th>
+          <th>Nama Pemesan</th>
+          <th>Status</th>
+          <th>Progress</th>
+          <th>Ekspedisi</th>
+          <th>Tanggal Kirim</th>
+          <th>Jenis Paket</th>
+          <th>Total Bayar</th>
+        </tr>
+      </thead>
+      <tbody id="trackingBody"></tbody>
+    </table>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">SITTA UT — Tracking Pengiriman | Tugas Praktik 1 STSI4209</div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/session.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    // Menangkap aksi submit pada form pencarian DO
+    document.getElementById("trackingForm").addEventListener("submit", e => {
+      // Mencegah halaman reload otomatis saat tombol cari ditekan
+      e.preventDefault(); 
+      
+      // Mengambil input dari user, menghapus spasi berlebih (trim), dan mengubahnya jadi huruf besar (toUpperCase) agar pencarian tidak case-sensitive
+      const keyword = document.getElementById("doNumber").value.trim().toUpperCase();
+      
+      // Mengambil data pesanan baru dari localStorage (jika ada simulasi dari halaman stok)
+      const localOrders = JSON.parse(localStorage.getItem("orders")) || [];
+      // Menggabungkan data bawaan (dari data.js) dengan data lokal
+      const allTracking = [...dataTracking, ...localOrders];
+      
+      // Menggunakan metode filter() untuk mencari DO yang nomornya mengandung kata kunci (keyword) yang diketik user
+      const filtered = allTracking.filter(order => order.doNumber.toUpperCase().includes(keyword));
+
+      // Jika hasil pencarian ada (lebih dari 0)
+      if (filtered.length > 0) {
+        // Render ulang tabel di bawah untuk hanya menampilkan data yang dicari
+        renderTrackingTable(filtered);
+        
+        // Hapus class 'hide' agar kotak hasil pencarian muncul di layar
+        document.getElementById("trackingResult").classList.remove("hide");
+        
+        // Mengambil data pertama dari hasil pencarian
+        const first = filtered[0];
+        
+        // Manipulasi DOM: Memasukkan data ke dalam elemen <span> sesuai dengan instruksi tugas
+        document.getElementById("nama").textContent = first.nama;
+        document.getElementById("status").textContent = first.status;
+        document.getElementById("progress").textContent = first.progress;
+        document.getElementById("ekspedisi").textContent = first.ekspedisi;
+        document.getElementById("tglKirim").textContent = first.tanggalKirim;
+        document.getElementById("jenis").textContent = first.jenisPaket;
+        document.getElementById("totalBayar").textContent = first.totalBayar.toLocaleString(); // Format angka jadi rupiah
+      } else {
+        // Jika data tidak ditemukan, munculkan alert feedback
+        alert("Nomor DO tidak ditemukan!");
+        // Sembunyikan kembali kotak hasil pencarian dengan menambahkan class 'hide'
+        document.getElementById("trackingResult").classList.add("hide");
+      }
+    });
+  </script>
+</body>
+</html>

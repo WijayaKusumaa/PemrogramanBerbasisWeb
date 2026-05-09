@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stok Bahan Ajar | SITTA UT</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  
+  <header class="site-header">
+    <div class="container header-inner">
+      <img src="assets/img/logo-ut.jpg" alt="Logo UT" style="height:40px;margin-right:10px;" onerror="this.src='assets/img/Default.jpg'">
+      <h1 class="brand">SITTA - UT</h1>
+      
+      <nav>
+        <a href="dashboard.html" class="btn ghost">🏠 Dashboard</a>
+        <a href="stok.html" class="btn ghost">📦 Stok</a>
+        <button id="logoutBtn" class="btn secondary">Logout</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      
+      <h2 id="greeting"></h2>
+      <p id="userInfo"></p>
+      
+      <button id="btnAdd" class="btn primary">Tambah Bahan Ajar</button>
+      
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Kode</th>
+            <th>Judul</th>
+            <th>Penerbit</th>
+            <th>Stok</th>
+            <th>Harga</th>
+            <th>Cover</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        
+        <tbody id="stokBody"></tbody>
+      </table>
+      
+      <p id="stokSummary">
+        <span id="totalStok"></span> | <span id="totalJenis"></span>
+      </p>
+      
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">SITTA UT — Stok Bahan Ajar | Tugas Praktik 1 STSI4209</div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/session.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

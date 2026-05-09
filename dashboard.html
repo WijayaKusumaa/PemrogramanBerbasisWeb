@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard - SITTA UT</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <img src="assets/img/logo-ut.jpg" alt="Logo UT" style="height:40px;margin-right:10px;" onerror="this.src='assets/img/Default.jpg'">
+      <h1 class="brand">SITTA - UT</h1>
+      
+      <nav>
+        <a href="stok.html" class="btn ghost">Informasi Bahan Ajar</a>
+        <a href="tracking.html" class="btn ghost">Tracking Pengiriman</a>
+        <button id="logoutBtn" class="btn secondary">Logout</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    
+    <section class="card">
+      <h2 id="greeting">Selamat datang</h2>
+      <p id="userInfo" class="small"></p>
+    </section>
+
+    <section class="layout">
+      
+      <aside class="card side">
+        <h3>Menu Navigasi</h3>
+        <ul>
+          <li><a href="stok.html">📚 Informasi Bahan Ajar</a></li>
+          <li><a href="tracking.html">🚚 Tracking Pengiriman</a></li>
+          <li><a href="#">📊 Laporan Monitoring</a></li>
+          <li><a href="#">📦 Rekap Bahan Ajar</a></li>
+          <li><a href="#">🧾 Histori Transaksi</a></li>
+        </ul>
+      </aside>
+
+      <article class="card main">
+        <h3>Ringkasan Sistem</h3>
+        <div class="grid stats">
+          <div class="stat">
+            <h4 id="stokTotal">-</h4>
+            <p>Total Stok Bahan Ajar</p>
+          </div>
+          <div class="stat">
+            <h4 id="inTransit">-</h4>
+            <p>Dalam Pengiriman</p>
+          </div>
+          <div class="stat">
+            <h4>3</h4>
+            <p>Pesanan Hari Ini (simulasi)</p>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">SITTA UT — Dashboard | Tugas Praktik 1 STSI4209</div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/session.js"></script>
+  
+  <script>
+    // Menunggu hingga semua elemen HTML (seperti #stokTotal) selesai dimuat di layar
+    document.addEventListener("DOMContentLoaded", () => {
+      
+      // --- Update Statistik Total Stok ---
+      const bahanAjar = getDataBahanAjar(); // Mengambil data dari data.js/localStorage
+      // reduce() menjumlahkan seluruh properti 'stok' dari array bahanAjar
+      const totalStok = bahanAjar.reduce((sum, item) => sum + item.stok, 0);
+      // Memasukkan hasil penjumlahan ke elemen HTML dengan ID stokTotal
+      document.getElementById("stokTotal").textContent = totalStok;
+      
+      // --- Update Statistik Dalam Pengiriman ---
+      // Mengambil data order lokal dan menggabungkannya dengan dataTracking bawaan
+      const localOrders = JSON.parse(localStorage.getItem("orders")) || [];
+      const allTracking = [...dataTracking, ...localOrders];
+      
+      // filter() menyaring pesanan yang statusnya spesifik "Dalam Pengiriman", lalu length menghitung jumlahnya
+      const dalamPengiriman = allTracking.filter(i => i.status === "Dalam Pengiriman").length;
+      // Memasukkan angka hasil filter ke elemen HTML dengan ID inTransit
+      document.getElementById("inTransit").textContent = dalamPengiriman;
+    });
+  </script>
+</body>
+</html>
