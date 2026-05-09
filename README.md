@@ -5,8 +5,8 @@ Universitas Terbuka (UT)
 ---
 
 ## Identitas Mahasiswa
-- Nama: Hendi  
-- NIM: 047974341  
+- Nama: Wijaya Kusuma
+- NIM: 050263657
 - Pemrograman Berbasis Web
 
 ---
